@@ -16,7 +16,7 @@ extern "C" {
 #define NUM_ANALOG_OUTPUTS   (0)
 
 /* Power */
-#define PIN_3V3_EN           (0 + 13)   // pokud máš stejně jako ProMicro DIY
+//#define PIN_3V3_EN           (0 + 13)   // pokud máš stejně jako ProMicro DIY
 #define BATTERY_PIN          (0 + 31)
 #define ADC_CHANNEL          ADC1_GPIO4_CHANNEL
 #define ADC_RESOLUTION       14
@@ -41,7 +41,7 @@ extern "C" {
 #define PIN_LED1             (0 + 15)
 #define LED_BLUE             PIN_LED1
 #define LED_STATE_ON         1
-#define BUTTON_PIN           (32 + 0)
+//#define BUTTON_PIN           (32 + 0)
 
 /* GPS - pokud používáš stejně jako původní varianta */
 #define GPS_TX_PIN           (0 + 20)
@@ -64,13 +64,17 @@ extern "C" {
 #define LORA_MISO            PIN_SPI_MISO
 #define LORA_MOSI            PIN_SPI_MOSI
 #define LORA_SCK             PIN_SPI_SCK
-#define LORA_CS              (32 + 13)
 
 /* Radio */
 #define USE_SX1262
-#define LORA_DIO1            (0 + 10)
-#define LORA_BUSY            (0 + 29)
-#define LORA_RESET           (0 + 9)
+#define SX126X_CS            (32 + 13)
+#define SX126X_DIO1          (0 + 10)
+#define SX126X_BUSY          (0 + 29)
+#define SX126X_RESET         (0 + 9)
+#define LORA_CS              SX126X_CS
+#define LORA_DIO1            SX126X_DIO1
+#define LORA_BUSY            SX126X_BUSY
+#define LORA_RESET           SX126X_RESET
 
 /* E22P specific */
 #define SX126X_DIO2_AS_RF_SWITCH
