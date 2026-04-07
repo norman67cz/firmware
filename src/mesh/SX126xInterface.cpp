@@ -3,6 +3,17 @@
 #include "configuration.h"
 #include "error.h"
 #include "mesh/NodeDB.h"
+
+static inline void setE22pEnable(bool on)
+{
+#ifdef E22P_EN
+    pinMode(E22P_EN, OUTPUT);
+    digitalWrite(E22P_EN, on ? HIGH : LOW);
+#else
+    (void)on;
+#endif
+}
+
 #ifdef ARCH_PORTDUINO
 #include "PortduinoGlue.h"
 #endif
@@ -54,6 +65,10 @@ template <typename T> bool SX126xInterface<T>::init()
                        // used and not part of the 'default' set of pin definitions.
     digitalWrite(SX126X_POWER_EN, HIGH);
     pinMode(SX126X_POWER_EN, OUTPUT);
+#endif
+
+#ifdef E22P_EN
+    setE22pEnable(true);
 #endif
 
 #if HAS_LORA_FEM
@@ -304,6 +319,7 @@ template <typename T> void SX126xInterface<T>::addReceiveMetadata(meshtastic_Mes
  */
 template <typename T> void SX126xInterface<T>::configHardwareForSend()
 {
+    setE22pEnable(true);
     setTransmitEnable(true);
     RadioLibInterface::configHardwareForSend();
 }
@@ -317,6 +333,7 @@ template <typename T> void SX126xInterface<T>::startReceive()
     sleep();
 #else
 
+    setE22pEnable(true);
     setTransmitEnable(false);
     setStandby();
 
@@ -393,6 +410,10 @@ template <typename T> bool SX126xInterface<T>::sleep()
 
 #ifdef SX126X_POWER_EN
     digitalWrite(SX126X_POWER_EN, LOW);
+#endif
+
+#ifdef E22P_EN
+    setE22pEnable(false);
 #endif
 
 #if HAS_LORA_FEM
