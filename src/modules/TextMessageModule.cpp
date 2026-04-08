@@ -11,6 +11,13 @@
 #include "main.h"
 TextMessageModule *textMessageModule;
 
+#if MESHTASTIC_EXCLUDE_SCREEN
+bool shouldWakeOnReceivedMessage()
+{
+    return false;
+}
+#endif
+
 ProcessMessage TextMessageModule::handleReceived(const meshtastic_MeshPacket &mp)
 {
 #if defined(DEBUG_PORT) && !defined(DEBUG_MUTE)

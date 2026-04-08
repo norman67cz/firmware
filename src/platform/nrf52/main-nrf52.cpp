@@ -195,6 +195,11 @@ void setBluetoothEnable(bool enable)
         return;
     }
 
+#ifdef YOMAMA_E22P_BARE_FORCE_BLE
+    // The bare debug build should always advertise, regardless of stale saved prefs.
+    config.bluetooth.enabled = true;
+#endif
+
     // If user disabled bluetooth: init then disable advertising & reduce power
     // Workaround. Avoid issue where device hangs several days after boot..
     // Allegedly, no significant increase in power consumption

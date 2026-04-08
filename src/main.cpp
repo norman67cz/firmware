@@ -1012,6 +1012,11 @@ void setup()
     PowerFSM_setup(); // we will transition to ON in a couple of seconds, FIXME, only do this for cold boots, not waking from SDS
     powerFSMthread = new PowerFSMThread();
 
+#ifdef YOMAMA_E22P_BARE_FORCE_BLE
+    // The bare debug build should advertise even if PowerFSM never reaches the normal BT-on path.
+    setBluetoothEnable(true);
+#endif
+
 #if !HAS_TFT
     setCPUFast(false); // 80MHz is fine for our slow peripherals
 #endif
