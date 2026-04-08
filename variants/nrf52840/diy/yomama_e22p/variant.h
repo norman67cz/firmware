@@ -43,15 +43,25 @@ extern "C" {
 #define LED_STATE_ON         1
 //#define BUTTON_PIN           (32 + 0)
 
-/* GPS - pokud používáš stejně jako původní varianta */
+/* GPS is optional on this board. Disable via -DYOMAMA_E22P_DISABLE_GPS=1. */
+#if defined(YOMAMA_E22P_DISABLE_GPS)
+#undef HAS_GPS
+#define HAS_GPS              0
+#define PIN_GPS_EN           (-1)
+#define PIN_SERIAL1_TX       (-1)
+#define PIN_SERIAL1_RX       (-1)
+#else
 #define GPS_TX_PIN           (0 + 20)
 #define GPS_RX_PIN           (0 + 22)
 #define PIN_GPS_EN           (0 + 24)
 #define GPS_UBLOX
+#endif
 
 /* UART */
+#if !defined(YOMAMA_E22P_DISABLE_GPS)
 #define PIN_SERIAL1_TX       GPS_TX_PIN
 #define PIN_SERIAL1_RX       GPS_RX_PIN
+#endif
 #define PIN_SERIAL2_RX       (0 + 6)
 #define PIN_SERIAL2_TX       (0 + 8)
 
@@ -78,6 +88,8 @@ extern "C" {
 
 /* E22P specific */
 #define SX126X_DIO2_AS_RF_SWITCH
+#define SX126X_DIO3_TCXO_VOLTAGE 1.8
+#define SX126X_CURRENT_LIMIT 140
 #define E22P_EN              (0 + 17)   // P0.17 = EN
 #define SX126X_RXEN          RADIOLIB_NC
 #define SX126X_TXEN          RADIOLIB_NC

@@ -69,6 +69,9 @@ template <typename T> bool SX126xInterface<T>::init()
 
 #ifdef E22P_EN
     setE22pEnable(true);
+#ifdef YOMAMA_E22P
+    delay(100);
+#endif
 #endif
 
 #if HAS_LORA_FEM
@@ -100,6 +103,16 @@ template <typename T> bool SX126xInterface<T>::init()
     bool useRegulatorLDO = false; // Seems to depend on the connection to pin 9/DCC_SW - if an inductor DCDC?
 
     RadioLibInterface::init();
+
+#ifdef YOMAMA_E22P
+    if (LORA_RESET != RADIOLIB_NC) {
+        pinMode(LORA_RESET, OUTPUT);
+        digitalWrite(LORA_RESET, LOW);
+        delay(20);
+        digitalWrite(LORA_RESET, HIGH);
+        delay(50);
+    }
+#endif
 
     limitPower(SX126X_MAX_POWER);
     // Make sure we reach the minimum power supported to turn the chip on (-9dBm)
