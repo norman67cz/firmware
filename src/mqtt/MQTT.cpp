@@ -772,13 +772,8 @@ void MQTT::onSend(const meshtastic_MeshPacket &mp_encrypted, const meshtastic_Me
 
     // mp_decoded will not be decoded when it's PKI encrypted and not directed to us
     if (mp_decoded.which_payload_variant == meshtastic_MeshPacket_decoded_tag) {
-        // For uplinking other's packets, check if it's not OK to MQTT or if it's an older packet without the bitfield
-        bool dontUplink = !mp_decoded.decoded.has_bitfield || !(mp_decoded.decoded.bitfield & BITFIELD_OK_TO_MQTT_MASK);
-        // Respect the DontMqttMeBro flag for other nodes' packets on public MQTT servers
-        if (!isFromUs(&mp_decoded) && !isMqttServerAddressPrivate && dontUplink) {
-            LOG_INFO("MQTT onSend - Not forwarding packet due to DontMqttMeBro flag");
-            return;
-        }
+        // mqtt_custom: forward all decoded packets heard on radio regardless of packet-level OK_TO_MQTT metadata.
+        // MQTT enablement and per-channel uplink policy still apply below.
 
         if (isConfiguredForDefaultServer && (mp_decoded.decoded.portnum == meshtastic_PortNum_RANGE_TEST_APP ||
                                              mp_decoded.decoded.portnum == meshtastic_PortNum_DETECTION_SENSOR_APP)) {
