@@ -797,8 +797,8 @@ void MQTT::onSend(const meshtastic_MeshPacket &mp_encrypted, const meshtastic_Me
         p = &mp_decoded;
         LOG_DEBUG("portnum %i message", mp_decoded.decoded.portnum);
     } else {
-        LOG_DEBUG("nothing, pkt not decrypted");
-        return; // Don't upload a still-encrypted PKI packet if not encryption_enabled
+        p = &mp_encrypted;
+        LOG_DEBUG("forward encrypted message without requiring mqtt encryption_enabled");
     }
 
     // Generate node ID from nodenum for service envelope
