@@ -442,7 +442,7 @@ void ScanI2CTwoWire::scanPort(I2CPort port, uint8_t *address, uint8_t asize)
                         type = INA260;
                     }
                 }
-#if HAS_TELEMETRY && !MESHTASTIC_EXCLUDE_ENVIRONMENTAL_SENSOR
+#if HAS_TELEMETRY && !MESHTASTIC_EXCLUDE_ENVIRONMENTAL_SENSOR && !defined(T114_CUST_SPI_PREFER_INA219)
                 if (type == NONE && detectSHT21SerialNumber(i2cBus, (uint8_t)addr.address)) {
                     logFoundDevice("SHTXX (SHT2X)", (uint8_t)addr.address);
                     type = SHTXX;
